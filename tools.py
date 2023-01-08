@@ -1,7 +1,6 @@
 import os
 import cv2
 import numpy as np
-from torchvision import transforms
 from tqdm import tqdm
 from PIL import Image
 
@@ -43,24 +42,6 @@ def crop_store_face(detector, input_dir='../data/all_face', output_dir='../data/
             bounding = detector.detect_face(img)
             crop = detector.crop_face(img, bounding)
             cv2.imwrite(os.path.join(output_dir, name), crop)
-
-
-def img_to_tensor(img):
-    """
-    Convert image in numpy array of (height, width, channel) into torch tensor of (channel, height, width)
-    :param img: image to be converted in numpy array
-    :return: torch tensor of the given image
-    """
-    return transforms.Compose([transforms.ToTensor()])(img)
-
-
-def tensor_to_img(img_tensor):
-    """
-    Convert image in torch tensor of (channel, height, width) into image in numpy array of (height, width, channel)
-    :param img_tensor: image tensor to be converted
-    :return: image in numpy array
-    """
-    return np.array(img_tensor.permute(1, 2, 0))
 
 
 def rotate(img, angle):

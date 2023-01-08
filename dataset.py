@@ -1,11 +1,12 @@
 from torch.utils.data import Dataset
+from torchvision import transforms
 import torch
 import cv2
 import os
 import numpy as np
 from tqdm import tqdm
 import random
-from tools import crop_face, img_to_tensor
+from tools import crop_face
 from config import get_config
 
 
@@ -98,8 +99,9 @@ class CASIA(Dataset):
     def __init__(self, list_dir, stage='train', data_size=10000):
         img_path_and_label = np.loadtxt(os.path.join(list_dir, stage+'.txt'), dtype=str)
         self.data_list = []
+        transform = transforms.Compose([transforms.ToTensor()])
         for path, label in tqdm(img_path_and_label[:data_size], desc="Make {} dataset".format(stage)):
-            img = img_to_tensor(cv2.imread(path))
+            img = transform(cv2.imread(path))
             img_pair = torch.split(img, split_size_or_sections=200, dim=2)
             self.data_list.append((img_pair, int(label)))
 

@@ -39,7 +39,6 @@ def predict(model, detected_face_lst, database_face_lst):
     results = []
     num_face = len(detected_face_lst)
     output_faces = model(detected_face_lst)
-    matched_face_imgs = []
     for face in database_face_lst:
         duplicate_img = torch.tile(face, (num_face, 1, 1, 1))
         outputs_database = model(duplicate_img)
@@ -50,9 +49,6 @@ def predict(model, detected_face_lst, database_face_lst):
             matched_face = detected_face_lst[idx, :, :, :]
             matched_face_pair = torch.cat((face, matched_face), dim=2)
             matched_face_pair = tensor_to_img(matched_face_pair)
-            cv2.imshow("Matched face pair", matched_face_pair)
-            cv2.waitKey(2000)
-            cv2.destroyAllWindows()
             results += [True]
         else:
             results += [False]
@@ -62,8 +58,7 @@ def predict(model, detected_face_lst, database_face_lst):
 def main(conf):
     model = get_predict_model(conf)
     database_img_lst = load_database(conf.database_dir)
-    os.makedirs('out', exist_ok=True)
-    detected_face_lst = detect_face('dataset/multiface.jpg')
+    detected_face_lst = detect_face(conf.input_pic)
     print(predict(model, detected_face_lst, database_img_lst))
 
 

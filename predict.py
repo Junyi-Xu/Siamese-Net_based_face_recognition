@@ -50,7 +50,6 @@ def predict(model, detected_face_lst, database_face_lst, database_name_lst, outp
         duplicate_face = torch.tile(database_torch_lst[i], (num_face, 1, 1, 1))
         outputs_database = model(duplicate_face)
         distances = euclidean_distance((output_faces, outputs_database)).squeeze()
-        print(distances)
         matched_indices = torch.nonzero(distances < 0.5)
         name = database_name_lst[i]
         if torch.numel(matched_indices) == 1:

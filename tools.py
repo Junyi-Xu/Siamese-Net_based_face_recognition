@@ -2,12 +2,7 @@ import os
 import cv2
 import numpy as np
 from tqdm import tqdm
-from PIL import Image
 
-
-############################
-# image processing functions
-############################
 
 def crop_face(img, box):
     left, top, right, bottom = int(box[0]), int(box[1]), int(box[2]), int(box[3])
@@ -67,25 +62,3 @@ def rotate_intensify(input_dir, output_dir='../data/all_face'):
                 dst = rotate(img, angle)
                 cv2.imwrite(os.path.join(output_dir, '%05d.jpg' % count), dst)
                 count += 1
-
-
-def adjust_img(img, img_size=224):
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = Image.fromarray(img)
-    image = img.resize((img_size, img_size), Image.LANCZOS)  # shrink image
-
-    # HWC to CHW
-    mean = np.array([0.485, 0.456, 0.406]).reshape(3, 1, 1)
-    std = np.array([0.229, 0.224, 0.225]).reshape(3, 1, 1)
-    image = np.array(image).astype('float32')
-    if len(image.shape) == 3:
-        image = np.swapaxes(image, 1, 2)
-        image = np.swapaxes(image, 1, 0)
-
-    # normalization
-    image /= 255
-    image -= mean
-    image /= std
-    image = image[[0, 1, 2], :, :]
-    image = np.expand_dims(image, axis=0).astype('float32')
-    return image

@@ -10,9 +10,9 @@ import os
 
 def get_dataloader(conf):
     train_set = CASIA(conf.list_dir, 'train', 60000)
-    train_loader = DataLoader(train_set, batch_size=conf.batch_size, shuffle=True, num_workers=conf.num_workers)
+    train_loader = DataLoader(train_set, batch_size=conf.batch_size, shuffle=True, num_workers=0)
     val_set = CASIA(conf.list_dir, 'val', 1500)
-    val_loader = DataLoader(val_set, batch_size=conf.batch_size, shuffle=True, num_workers=conf.num_workers)
+    val_loader = DataLoader(val_set, batch_size=conf.batch_size, shuffle=True, num_workers=0)
     return train_loader, val_loader
 
 

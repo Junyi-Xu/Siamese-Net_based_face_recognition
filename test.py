@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 def get_dataloader(conf):
     test_set = CASIA(conf.list_dir, 'test', 1500)
-    test_loader = DataLoader(test_set, batch_size=conf.batch_size, shuffle=True, num_workers=conf.num_workers)
+    test_loader = DataLoader(test_set, batch_size=conf.batch_size, shuffle=True, num_workers=0)
     return test_loader
 
 

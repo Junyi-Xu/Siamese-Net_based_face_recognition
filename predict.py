@@ -19,8 +19,8 @@ def get_predict_model(conf):
 def detect_face(img_path):
     detector = FaceDetector()
     img, boundings = detector.detect_face(img_path)
-    img_torch_lst = []
     img_lst = []
+    os.makedirs('database', exist_ok=True)
     for i, box in enumerate(boundings):
         crop = crop_face(img, box)
         img_lst.append(crop)
@@ -68,6 +68,8 @@ def main(conf):
     database_face_lst, database_name_lst = load_database(conf.database_dir)
     detected_face_lst = detect_face(conf.input_pic)
     os.makedirs(conf.output_pic, exist_ok=True)
+    for f in os.listdir(conf.output_pic):
+        os.remove(os.path.join(conf.output_pic, f))
     matched_person_lst, missed_person_lst = predict(model, detected_face_lst, database_face_lst, database_name_lst, conf.output_pic)
     print('People found: ', end='')
     for name in matched_person_lst:
